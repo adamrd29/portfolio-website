@@ -1,4 +1,4 @@
-baseURL: https://adamday.dev/
+baseURL: "https://www.adamday.dev/"
 languageCode: en-us
 title: Adam Day
 theme: ["PaperMod"]
