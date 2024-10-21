@@ -1,0 +1,8 @@
+{{/* image-resize.html shortcode for static images */}}
+{{ $path := .Get "path" }}
+{{ $width := .Get "width" }}
+{{ $height := .Get "height" }}
+{{ $alt := .Get "alt" | default "" }}
+
+<img src="{{ $path }}" alt="{{ $alt }}" width="{{ $width }}" height="{{ $height }}">
+

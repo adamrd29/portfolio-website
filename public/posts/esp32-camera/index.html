@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Servo-Controlled Web Camera | Adam Day</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduction
+As part of the implementation section for my final-year Internet of Things course during my undergraduate degree, the decision was made to create a camera system that can alter its viewing angle remotely. This type of device brings an added dimension of versatility to security cameras by allowing a single camera to cover a much wider area than what would be otherwise possible without distorting the image with accessories like a fisheye lens. To achieve this, the project will make use of an internet-connected microcontroller that will host a webpage displaying a live camera feed and an array of buttons that send movement instructions to the microcontroller to be acted on by the servo motors. This project aims to create a system that can display low-latency video of acceptable quality for security purposes while also providing a robust movement system that is all accessible in a simple user interface.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/esp32-camera/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/esp32-camera/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Adam Day (Alt + H)">Adam Day</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Servo-Controlled Web Camera
+    </h1>
+    <div class="post-meta"><span title='2024-02-16 15:47:05 +0100 +0100'>February 16, 2024</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>As part of the implementation section for my final-year Internet of Things course during my undergraduate degree, the decision was made to create a camera system that can alter its viewing angle remotely. This type of device brings an added dimension of versatility to security cameras by allowing a single camera to cover a much wider area than what would be otherwise possible without distorting the image with accessories like a fisheye lens. To achieve this, the project will make use of an internet-connected microcontroller that will host a webpage displaying a live camera feed and an array of buttons that send movement instructions to the microcontroller to be acted on by the servo motors. This project aims to create a system that can display low-latency video of acceptable quality for security purposes while also providing a robust movement system that is all accessible in a simple user interface.</p>
+<h2 id="project-hardware">Project Hardware<a hidden class="anchor" aria-hidden="true" href="#project-hardware">#</a></h2>
+<p>The microcontroller selected for this project was the ESP32-WROVER CAM. This board was an ideal choice for this project due to the versatility of the ESP32 microcontroller for IoT applications and the inclusion of a camera module and Wi-Fi antenna to streamline circuitry significantly by removing the need for separate hardware to achieve the same functionality. Furthermore, the ample amount of GPIO pins facilitated the easy expansion of extra hardware, while an inbuilt USB to serial chip provided a heightened level of convenience by allowing the upload of code to the board directly through the USB port rather than requiring an FTDI programmer.</p>
+
+
+
+
+
+
+<img src="/img/ESP32.png" alt="ESP32 Microcontroller" width="200" height="250">
+
+
+<p>To provide the movement element of this system, the SG90 mini servo was chosen to be used in conjunction with a pan-tilt gimbal. This servo is a popular choice in maker communities due to its ability to provide granular movement control while maintaining a compact form factor and low power requirements, properties that were conducive to this project by alleviating the need for any external power sources, making the system both easily portable and simple to power via battery. This project utilises two of these servos attached to the aforementioned pan-tilt gimbal to translate the rotational movement of the servos to a two-axis movement platform from which the ESP32 can be attached.</p>
+
+
+
+
+
+
+<img src="/img/pantilt_servo.png" alt="Project Hardware" width="400" height="200">
+
+
+<h2 id="project-software">Project Software<a hidden class="anchor" aria-hidden="true" href="#project-software">#</a></h2>
+<h3 id="camera-setup">Camera Setup<a hidden class="anchor" aria-hidden="true" href="#camera-setup">#</a></h3>
+<p>Natively, Micropython doesn&rsquo;t include the necessary driver to make use of the camera module that is an essential part of this project, so to remedy this issue, it became a requirement for custom firmware to be flashed onto the board that included the required camera driver to allow for operation from within the code. For simplicity, this project made use of the precompiled camera-focused firmware from LeMaRiva that, after a simple flashing process, gave full access to the OV2640 camera through the ‘camera’ library.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    camera<span style="color:#f92672">.</span>init(<span style="color:#ae81ff">0</span>, d0<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, d1<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, d2<span style="color:#f92672">=</span><span style="color:#ae81ff">18</span>, d3<span style="color:#f92672">=</span><span style="color:#ae81ff">19</span>, d4<span style="color:#f92672">=</span><span style="color:#ae81ff">36</span>, d5<span style="color:#f92672">=</span><span style="color:#ae81ff">39</span>, d6<span style="color:#f92672">=</span><span style="color:#ae81ff">34</span>, d7<span style="color:#f92672">=</span><span style="color:#ae81ff">35</span>,
+</span></span><span style="display:flex;"><span>        format<span style="color:#f92672">=</span>camera<span style="color:#f92672">.</span>JPEG, framesize<span style="color:#f92672">=</span>camera<span style="color:#f92672">.</span>FRAME_VGA, 
+</span></span><span style="display:flex;"><span>        xclk_freq<span style="color:#f92672">=</span>camera<span style="color:#f92672">.</span>XCLK_10MHz,
+</span></span><span style="display:flex;"><span>        href<span style="color:#f92672">=</span><span style="color:#ae81ff">23</span>, vsync<span style="color:#f92672">=</span><span style="color:#ae81ff">25</span>, reset<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, pwdn<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        sioc<span style="color:#f92672">=</span><span style="color:#ae81ff">27</span>, siod<span style="color:#f92672">=</span><span style="color:#ae81ff">26</span>, xclk<span style="color:#f92672">=</span><span style="color:#ae81ff">21</span>, pclk<span style="color:#f92672">=</span><span style="color:#ae81ff">22</span>, fb_location<span style="color:#f92672">=</span>camera<span style="color:#f92672">.</span>PSRAM)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>To initialise the camera ready for use later on in the program the ‘camera_init’ function needs to be called. This function takes several parameters, including a list of the GPIO pins that the camera module is linked to, and performance settings for the camera feed such as resolution and clocking frequency. Information about the GPIO pin configuration was readily available through the board manufacturer documentation and the performance of the camera was kept modest with a VGA resolution and clocking frequency of 10MHz so as not to overwhelm the limited computing power of the ESP32 while still maintaining a smooth and somewhat detailed image. The final parameter ‘fb_location’ determines where the frame buffer will be stored; PSRAM was selected for this purpose as the balance of speed and capacity it provides make it most suitable for this application.</p>
+<h3 id="web-server-setup">Web Server Setup<a hidden class="anchor" aria-hidden="true" href="#web-server-setup">#</a></h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>    station <span style="color:#f92672">=</span> network<span style="color:#f92672">.</span>WLAN(network<span style="color:#f92672">.</span>STA_IF)
+</span></span><span style="display:flex;"><span>    station<span style="color:#f92672">.</span>active(<span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    station<span style="color:#f92672">.</span>connect(config<span style="color:#f92672">.</span>ssid, config<span style="color:#f92672">.</span>password)
+</span></span><span style="display:flex;"><span>    timeout <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> station<span style="color:#f92672">.</span>isconnected():
+</span></span><span style="display:flex;"><span>      sleep(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> timeout <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">5</span>:
+</span></span><span style="display:flex;"><span>          print(<span style="color:#e6db74">&#39;Connection failed&#39;</span>)
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>      timeout <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> station<span style="color:#f92672">.</span>isconnected():
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">&#39;Connection successful&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(station<span style="color:#f92672">.</span>ifconfig())
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>With access to the camera accomplished, focus could be shifted to the web server that acts as the foundation for the camera&rsquo;s control and monitoring system. This began by establishing a network connection using the ‘network’ included with micropython which provided the functionality for seamlessly working with network connections in MicroPython and provided configuration options for the ESP32 to operate as either a station or an access point. While both of these choices would be functional, the choice was made to implement the ESP32 as a station since using an access-point configuration would limit the range of the system to the range of the ESP32 antenna whereas a device operating as a station can be configured to be accessible from anywhere where an internet connection is available which is much more useful for a security camera. Network credentials were handled through a separate file named ‘config.py’ to detach sensitive information from the main codebase, this file is called by the ESP32 during connection attempts where five seconds are allocated for the connection to be established, otherwise, the connection attempt is deemed to have failed.</p>
+<p>With a network connection established, a web server can now be set up. It is essential that the web server can accept asynchronous requests to facilitate the constantly updating video feed without requiring a page refresh. A common way of achieving this is through the ‘asyncio’ library which provides powerful general-purpose async operations to Python. However, the power and functionality provided by asyncio goes beyond what is required for this project and so a more elegant solution is a web-focused framework such as ‘picoweb’. This framework was purpose-built for handling network requests on microcontroller devices like the ESP32 and enjoys advantages such as simple configuration and computational efficiency as a result, making it a much more fitting choice for this project.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>ROUTES <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">&#34;/&#34;</span>, index),
+</span></span><span style="display:flex;"><span>    (<span style="color:#e6db74">&#34;/stream&#34;</span>, stream),
+</span></span><span style="display:flex;"><span>]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>To set up the web server for incoming requests, each URL that is expected to receive requests must be linked to a function. In this instance two types of requests are expected, those directed at the root URL, which is responsible for displaying the webpage interface, and those directed at the stream URL, which provides the asynchronous streaming of live video from the camera module to the web page. To address this, the functions ‘index’ and ‘stream’ were created to hold the logic required to handle the requests from these URLs appropriately.</p>
+<h3 id="video-streaming">Video Streaming<a hidden class="anchor" aria-hidden="true" href="#video-streaming">#</a></h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">stream</span>(req, resp):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">yield from</span> picoweb<span style="color:#f92672">.</span>start_response(resp, content_type<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;multipart/x-mixed-replace; boundary=frame&#34;</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>        buf <span style="color:#f92672">=</span> camera<span style="color:#f92672">.</span>capture()
+</span></span><span style="display:flex;"><span>        frame_data <span style="color:#f92672">=</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;--frame</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">Content-Type: image/jpeg</span><span style="color:#ae81ff">\r\n\r\n</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">+</span> buf <span style="color:#f92672">+</span> <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">yield from</span> resp<span style="color:#f92672">.</span>awrite(frame_data)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>To set up the web server for incoming requests, each URL that is expected to receive requests must be linked to a function. In this instance two types of requests are expected, those directed at the root URL, which is responsible for displaying the webpage interface, and those directed at the stream URL, which provides the asynchronous streaming of live video from the camera module to the web page. To address this, the functions ‘index’ and ‘stream’ were created to hold the logic required to handle the requests from these URLs appropriately.</p>
+<p>The function for handling the live transmission of video is quite straightforward, it begins by initiating a multipart response via picoweb, which directs new data to take the place of existing data within an ongoing response, and is followed by an infinite while loop that continuously applies the relevant headers and formatting to a newly captured image so it can be asynchronously transmitted to the web server for live viewing.</p>
+<h3 id="servo-control">Servo Control<a hidden class="anchor" aria-hidden="true" href="#servo-control">#</a></h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>panPos <span style="color:#f92672">=</span> <span style="color:#ae81ff">90</span>
+</span></span><span style="display:flex;"><span>tiltPos <span style="color:#f92672">=</span> <span style="color:#ae81ff">90</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>panServo <span style="color:#f92672">=</span> PWM(Pin(<span style="color:#ae81ff">14</span>), freq<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>, duty<span style="color:#f92672">=</span>panPos)
+</span></span><span style="display:flex;"><span>tiltServo <span style="color:#f92672">=</span> PWM(Pin(<span style="color:#ae81ff">13</span>), freq<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>, duty<span style="color:#f92672">=</span>tiltPos)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>To be able to control the servo motors, they first must be initialised. Although there isn&rsquo;t a readily available library for convenient servo control in MicroPython as there is in Arduino, it&rsquo;s still possible to control the servos using pulse width modulation (PWM) duty values instead. To achieve this, two variables are first created to keep a running track of what position the servo is in, and then two corresponding PWM objects are created that represent the GPIO pin each servo is connected to on the ESP32. Using these object variables, servo properties such as duty can be freely controlled through commands built into the PWM library.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">index</span>(req, resp):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">global</span> panPos, tiltPos
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> req<span style="color:#f92672">.</span>method <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;POST&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">yield from</span> req<span style="color:#f92672">.</span>read_form_data()
+</span></span><span style="display:flex;"><span>        data <span style="color:#f92672">=</span> req<span style="color:#f92672">.</span>form
+</span></span><span style="display:flex;"><span>        direction <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;direction&#39;</span>, <span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> direction <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;down&#34;</span> <span style="color:#f92672">and</span> tiltPos <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">111</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>                tiltPos <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>                tiltServo<span style="color:#f92672">.</span>duty(tiltPos)
+</span></span><span style="display:flex;"><span>                sleep_ms(<span style="color:#ae81ff">20</span>)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The main body of the servo control exists within the index function of the program as it is expected that all servo control will be managed through the web interface. Upon receiving a POST request, the relevant servo will be moved by a predetermined amount with ‘up’ and ‘down’ requests controlling tilt, while ‘left’ and ‘right’ requests control pan. Each conditional statement also incorporates checks to ensure the servo duty remains within a safe operating range to prevent damage to the servos that could render the system inoperable. The movement of the servos is then broken down into a ‘for’ loop which adds a 20ms delay between each duty value update to provide a smoother panning experience as it was found that the servo moving to its end destination at full speed was quite jarring in practice.</p>
+<h3 id="user-interface">User Interface<a hidden class="anchor" aria-hidden="true" href="#user-interface">#</a></h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">move</span>(<span style="color:#a6e22e">direction</span>){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">body</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;direction=&#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">direction</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">xhttp</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">XMLHttpRequest</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">xhttp</span>.<span style="color:#a6e22e">open</span>(<span style="color:#e6db74">&#34;POST&#34;</span>, <span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">xhttp</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">body</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>As alluded to earlier, the user interface is fleshed out using HTML in a web environment. The most prominent feature of the page is the video feed provided by the ESP32 camera, which is powered through an image tag linked to the ‘/stream’ URL that as mentioned previously will constantly provide an up-to-date image of what the camera module sees. The second part of the interface is the control buttons; Each one of these buttons calls a function when clicked that sends an asynchronous POST request containing the cardinality of the button under the variable name ’direction’, this is what the conditional statements in the index function are using as comparison to determine what servo to move and in what direction.</p>
+
+
+
+
+
+
+<img src="/img/ui.png" alt="User Interface" width="300" height="350">
+
+
+<h2 id="final-product">Final Product<a hidden class="anchor" aria-hidden="true" href="#final-product">#</a></h2>
+<p>The result of this project is a plug-and-play system that will begin operations immediately after receiving power. While operational, users can visit the IP address assigned to the device to view the live video feed from the camera while also being able to influence the direction the camera is facing up to two times in each direction by using the arrow buttons provided by the web interface. With further network configuration, users can also set up this device to work remotely through methods such as port forwarding or a local VPN.</p>
+<p>Overall, the project achieved what it originally set out to do, provide wireless access to a video feed while allowing for the ability to remotely change the camera&rsquo;s angle. However, there were certain limitations that should be addressed should the project be revisited. Firstly,
+Overall, the project successfully met its main objectives, though there are areas for potential enhancement. The video streaming delivered clear VGA resolution with minimal latency, suitable for live monitoring. However, the image quality wasn&rsquo;t top-tier due to hardware limitations of the ESP32 and MicroPython’s runtime performance. Future improvements could involve using a more powerful microcontroller or faster firmware like NodeMCU to enable higher quality streaming. The two-axis camera control was also effective, with SG90 servo motors providing accurate and smooth motion across a wide range, fulfilling the goal of large coverage. However, the motors were somewhat noisy, and the plastic pan-tilt gimbal’s lightweight design made the setup prone to toppling, suggesting a need for quieter motors and more robust materials for stability in future iterations. Finally, the user interface was simple to use and easily accessible through its web interface. However, there was still room for aesthetic improvements to make the user experience more enjoyable</p>
+<video class="video-shortcode" preload="auto" controls
+     width="854"  
+     height="480" >
+    
+    <source src="/video/esp32-vid.mp4" type="video/mp4">
+    
+    Video unsupported by browser.
+</video>
+
+
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/posts/ai-animal-classifier/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>AI Animal Classifier</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2024 <a href="http://localhost:1313/">Adam Day</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

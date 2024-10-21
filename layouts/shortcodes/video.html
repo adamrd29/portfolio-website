@@ -1,0 +1,9 @@
+<video class="video-shortcode" preload="{{ .Get "preload" }}" controls
+    {{ with .Get "width" }} width="{{ . }}" {{ end }} 
+    {{ with .Get "height" }} height="{{ . }}" {{ end }}>
+    
+    <source src="{{ .Get "src" }}" type="{{ .Get "type" }}">
+    
+    Video unsupported by browser.
+</video>
+

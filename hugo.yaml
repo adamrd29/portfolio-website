@@ -1,0 +1,15 @@
+baseURL: https://adamday.dev/
+languageCode: en-us
+title: Adam Day
+theme: ["PaperMod"]
+
+params:
+    homeInfoParams:
+        Title: 'Welcome to my Portfolio'
+        Content: I’m a dedicated and detail-driven master’s student in Advanced Computer Science, building on a First-Class Honours degree in Computer Science. With a deep passion for technology and problem-solving, I’m excited to take my academic knowledge into the industry and work on real-world challenges. I’m eager to gain hands-on experience, collaborate with talented teams, and use my skills to contribute to innovative projects in a meaningful way.
+    socialIcons:
+        - name: github
+          url: 'https://github.com/adamrd29?tab=repositories'
+        - name: linkedin
+          url: 'https://linkedin.com/in/adam-day-19880a323'
+    ShowPostNavLinks: true

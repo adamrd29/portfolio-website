@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on Adam Day</title>
+    <link>http://localhost:1313/posts/</link>
+    <description>Recent content in Posts on Adam Day</description>
+    <generator>Hugo -- 0.134.1</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 25 May 2024 15:47:05 +0100</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Android Sports App</title>
+      <link>http://localhost:1313/posts/android-sports-app/</link>
+      <pubDate>Sat, 25 May 2024 15:47:05 +0100</pubDate>
+      <guid>http://localhost:1313/posts/android-sports-app/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;For the implementation phase of the mobile development course that I undertook during the final-year of my undergraduate degree, I was tasked with developing an application for the android operating system. In tackling this project, I focused on the informational side of Android applications in the form of a football scores and standings app that would be capable of retrieving up-to-date information on the table and fixtures of the Spanish first division, “La Liga” upon the user&amp;rsquo;s request. Aside from personal interest, this project was seen as an ideal opportunity to experiment with internet-based interactions from within the Android operating system as well as to gain experience in developing a clean and intuitive user interface that matches form and function in equal measure to provide seamless data access.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>AI Animal Classifier</title>
+      <link>http://localhost:1313/posts/ai-animal-classifier/</link>
+      <pubDate>Fri, 26 Apr 2024 00:00:05 +0100</pubDate>
+      <guid>http://localhost:1313/posts/ai-animal-classifier/</guid>
+      <description>&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;As a part of the Intelligent Systems course that constituted towards my undergraduate degree I was tasked with the creation of a machine learning model using one of the many techniques that are commonly encountered in the field of Artificial Intelligence. This project explores the development of a supervised image classifier using a convolutional neural network. Making use of the PyTorch library, it focuses on breaking down the constituent parts of an image classifier to provide an in-depth analysis of the intricacies of the architecture, training process, and performance evaluation, while utilising CUDA acceleration along the way to speed up the model processes. After a meticulous process of iterative refinement and the addition of data augmentation techniques, the resulting custom CNN architecture achieved an accuracy score of 85.21% on the “Animal Species Classification - V3” dataset from Kaggle, a respectable result that aptly demonstrates the potential that CNNs hold for image classification tasks. Additionally, suggestions for future improvements are explored, including the implementation of transfer learning and the inclusion of new metrics, paving the way for future iterations of the model to produce greater, more accurate results.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Servo-Controlled Web Camera</title>
+      <link>http://localhost:1313/posts/esp32-camera/</link>
+      <pubDate>Fri, 16 Feb 2024 15:47:05 +0100</pubDate>
+      <guid>http://localhost:1313/posts/esp32-camera/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;As part of the implementation section for my final-year Internet of Things course during my undergraduate degree, the decision was made to create a camera system that can alter its viewing angle remotely. This type of device brings an added dimension of versatility to security cameras by allowing a single camera to cover a much wider area than what would be otherwise possible without distorting the image with accessories like a fisheye lens. To achieve this, the project will make use of an internet-connected microcontroller that will host a webpage displaying a live camera feed and an array of buttons that send movement instructions to the microcontroller to be acted on by the servo motors. This project aims to create a system that can display low-latency video of acceptable quality for security purposes while also providing a robust movement system that is all accessible in a simple user interface.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
