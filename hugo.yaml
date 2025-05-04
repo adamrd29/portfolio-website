@@ -6,7 +6,7 @@ theme: ["PaperMod"]
 params:
     homeInfoParams:
         Title: 'Welcome to my Portfolio'
-        Content: I’m a dedicated and detail-driven master’s student in Advanced Computer Science, building on a First-Class Honours degree in Computer Science. With a deep passion for technology and problem-solving, I’m excited to take my academic knowledge into the industry and work on real-world challenges. I’m eager to gain hands-on experience, collaborate with talented teams, and use my skills to contribute to innovative projects in a meaningful way.
+        Content: 'A dedicated and detail-oriented Computer Science graduate with a strong passion for technology, problem-solving, and continuous learning. Eager to transition academic knowledge into practical industry experience, tackling real-world challenges and collaborating with talented teams. Looking to build on an existing foundation of technical skills to deliver effective solutions, adapt quickly to new technologies, and make a meaningful contribution within a professional environment.'
     socialIcons:
         - name: github
           url: 'https://github.com/adamrd29?tab=repositories'
