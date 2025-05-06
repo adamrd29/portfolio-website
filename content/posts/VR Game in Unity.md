@@ -67,4 +67,4 @@ Assessing the end product against the initial criteria, I believe that the proje
 
 The other feature that I believe would add great value to this project is the representation of the VR controllers as interactive VR hands. This feature would open up the possibility of creating a deeper level of immersion by allowing the player to engage with the virtual environment using natural hand movements that would dynamically alter functionality based on the hand pose of the user. For this application, this would include a pointed finger allowing for button presses while a clasped hand would be the method for grabbing objects. This feature was experimented with during development, however achieving a convincing effect proved to be a complex endeavour so instead of the inclusion of a half-baked feature, the decision was made to revert back to the VR controller model.
 
-{{< video src="/video/esp32-vid.mp4" type="video/mp4" preload="auto" width="854" height="480" >}}
+{{< video src="/video/VR_video.mp4" type="video/mp4" preload="auto" width="854" height="480" >}}
