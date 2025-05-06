@@ -48,7 +48,7 @@ public class SetAngle: MonoBehaviour
 }
 ```
 
-{{< image-resize path="/img/vr_rotation.png" width="300" height="100" alt="Rotation Parameters" >}}
+{{< image-resize path="/img/vr_rotation.png" width="500" height="100" alt="Rotation Parameters" >}}
 
 The idea for the functionality of the lever was to translate its rotational movement into the linear movement of an object elsewhere in the room to reveal a second hidden crevice. To achieve this, the rotation of the lever needed to be represented as a percentage of its total range of motion using a range normalisation equation. It was here that a flaw was found in the initial plan as the use of Euler angles could only differentiate the objects relative to their initial, central position, making the percentage calculations impossible as both directions of the lever would read as 45 degrees. To remedy this issue, the switch was made to an approach that used quaternions with the minimum and maximum rotation values explicitly declared. Although a less flexible solution, it solved this issue and so it was maintained through to the final version. Once the percentage had been declared, moving the object became as simple as multiplying the percentage decimal by the declared range of movement and adding it to the moving object's starting position, which is recorded on initialisation.
 
@@ -60,7 +60,7 @@ With all the major mechanics in place, a room needed to be built around the mech
 
 Once the main body room was finished, all that was missing was a sense of competition to incentivise the player to try escape as quickly as possible. To address this, a timer was added beyond the escape door that would only stop once the key had been entered into the door. This feature provides the player with a quantifiable metric that can be used for personal improvement and friendly competition purposes while also acting as a finish line to congratulate the player for solving all of the puzzles presented to them. As the stoppage of the timer is intrinsically linked to the unlocking of the escape door and the logic was quite simple in nature, only requiring the alteration of a Boolean value, it was a reasonable design decision to treat the timer as an additional feature of the door unlock trigger and therefore house all the necessary logic within the same script.
 
-{{< image-resize path="/img/vr_escapetime.png" width="400" height="200" alt="Escape Complete Room" >}}
+{{< image-resize path="/img/VR_escapetime.png" width="400" height="200" alt="Escape Complete Room" >}}
 
 ## Final Analysis
 Assessing the end product against the initial criteria, I believe that the project met the goals set out for it in the beginning and, as such, was a mostly successful endeavour. However, certain aspects of the project remain that could do with further refinement to create a more immersive and gratifying VR gaming experience, the first of which is the implementation of harder, more complex puzzles. This version of the project prioritised showcasing VR features in its puzzle design, a philosophy that helped the game take full advantage of VR's unique functionality but also left plenty of room for future revisions to begin to expand the puzzle design in more interesting ways to provide a greater sense of accomplishment to the player.

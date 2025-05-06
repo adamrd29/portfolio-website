@@ -48,7 +48,7 @@ Figure 2 - Base Data Results
 
 Adding the included pre-generated augmented images, totalling 10000 per class, to the training set, notable performance improvements were observed; the model seeking the highest validation accuracy demonstrated a testing accuracy of 84.59% after 22 epochs, while the model seeking the lowest validation loss value reached an accuracy of 85.21% after 11 epochs, an improvement ranging from 5.22% to 5.84% over the results from the base data. While the augmented models converged in significantly fewer epochs, the actual training time of the model was significantly longer as each epoch took around 20 minutes to complete, resulting in a training time ranging from 4 hours for the minimum loss model, to 7 hours and 20 minutes for the model measured on maximum validation set accuracy.
 
-![Augemented Data Results](/img/augmentedDataResults.png)
+![Augmented Data Results](/img/augmentedDataResults.png)
 Figure 3- Augmented Data Results
 
 Overall, a peak accuracy of 85.21% is a satisfactory result that shows the competence of this custom CNN architecture for animal classification purposes. However, this result also leaves plenty of headroom for future improvement, as demonstrated by other attempts at classification using this dataset that have boasted over 95% accuracy scores by leveraging the domain knowledge of popular pre-trained models such as VGG and ResNet which were initially trained on much larger and diverse datasets such as ImageNet. Illustrating the effectiveness that transfer learning possesses in image classification applications.
