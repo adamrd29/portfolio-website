@@ -6,8 +6,31 @@
     <description>Recent content on Adam Day</description>
     <generator>Hugo -- 0.134.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 25 May 2024 15:47:05 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 20 May 2025 15:47:05 +0100</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Self-Hosting</title>
+      <link>http://localhost:1313/posts/selfhosting/</link>
+      <pubDate>Tue, 20 May 2025 15:47:05 +0100</pubDate>
+      <guid>http://localhost:1313/posts/selfhosting/</guid>
+      <description>&lt;h2 id=&#34;nas&#34;&gt;NAS&lt;/h2&gt;
+&lt;details&gt;
+  &lt;summary&gt;
+    &lt;span style=&#34;font-size: 1.3em; font-weight: bold;&#34;&gt;
+      Configuration
+    &lt;/span&gt;
+  &lt;/summary&gt;
+
+  &lt;p&gt;The primary reason for the construction of this server was to operate as network storage as before my data was scattered across multiple drives with zero backup which was not only an inconvenience when it came to access, but also carried a high risk of data loss should one of the many drives fail.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Home Server PC Build</title>
+      <link>http://localhost:1313/posts/home-server-pc-build/</link>
+      <pubDate>Thu, 08 May 2025 15:47:05 +0100</pubDate>
+      <guid>http://localhost:1313/posts/home-server-pc-build/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Maintaining control and privacy over the technology I use on a day-to-day basis has always been something that I have strived towards and when combined with my long-term interest of exploring technology, self-hosting became an very interesting avenue that I couldn&amp;rsquo;t turn my head away from. The idea of running my own services instead of relying on third-party platforms presented the perfect opportunity to take control over my data while developing valuable skills in server management and system administration. With this in mind, I decided to build myself a server that would be the foundation of my journey.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Android Sports App</title>
       <link>http://localhost:1313/posts/android-sports-app/</link>
@@ -31,6 +54,14 @@
       <guid>http://localhost:1313/posts/esp32-camera/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;As part of the implementation section for my final-year Internet of Things course during my undergraduate degree, the decision was made to create a camera system that can alter its viewing angle remotely. This type of device brings an added dimension of versatility to security cameras by allowing a single camera to cover a much wider area than what would be otherwise possible without distorting the image with accessories like a fisheye lens. To achieve this, the project will make use of an internet-connected microcontroller that will host a webpage displaying a live camera feed and an array of buttons that send movement instructions to the microcontroller to be acted on by the servo motors. This project aims to create a system that can display low-latency video of acceptable quality for security purposes while also providing a robust movement system that is all accessible in a simple user interface.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>VR Project in Unity</title>
+      <link>http://localhost:1313/posts/vr-game-in-unity/</link>
+      <pubDate>Sat, 10 Feb 2024 15:47:05 +0100</pubDate>
+      <guid>http://localhost:1313/posts/vr-game-in-unity/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;For the coursework of the Spatial Computing module in my final year of university, the task was to create an experience that allowed the user to interact using their bodies. For my project, the decision was made to pursue virtual reality due to a personal interest in the field. I sought to explore the cornerstone features of VR to truly delve into what makes spatial computing unique and innovative compared to traditional systems. Using this methodology, world traversal and object interaction were pinpointed as two of the most distinctive features that VR systems have to offer, and as such, they became the focal points around which I would base my project. It then became a necessity to formulate a project idea that could effectively harness these two features to create a coherent and immersive VR experience which culminated in the decision to create a virtual escape room where the user would explore and interact with their surroundings to solve a number of puzzles that would lead to their escape.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

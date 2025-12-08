@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Home Server PC Build | Adam Day</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduction
+Maintaining control and privacy over the technology I use on a day-to-day basis has always been something that I have strived towards and when combined with my long-term interest of exploring technology, self-hosting became an very interesting avenue that I couldn&rsquo;t turn my head away from. The idea of running my own services instead of relying on third-party platforms presented the perfect opportunity to take control over my data while developing valuable skills in server management and system administration. With this in mind, I decided to build myself a server that would be the foundation of my journey.">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/posts/home-server-pc-build/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/home-server-pc-build/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Adam Day (Alt + H)">Adam Day</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Home Server PC Build
+    </h1>
+    <div class="post-meta"><span title='2025-05-08 15:47:05 +0100 BST'>May 8, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>Maintaining control and privacy over the technology I use on a day-to-day basis has always been something that I have strived towards and when combined with my long-term interest of exploring technology, self-hosting became an very interesting avenue that I couldn&rsquo;t turn my head away from. The idea of running my own services instead of relying on third-party platforms presented the perfect opportunity to take control over my data while developing valuable skills in server management and system administration. With this in mind, I decided to build myself a server that would be the foundation of my journey.</p>
+<h2 id="hardware--os">Hardware &amp; OS<a hidden class="anchor" aria-hidden="true" href="#hardware--os">#</a></h2>
+<h3 id="platform">Platform<a hidden class="anchor" aria-hidden="true" href="#platform">#</a></h3>
+<p>As the baseline for this build, the AM4 platform was selected for two key reasons: first and foremost it has support for ECC memory; As a server that is set to be operational 24/7, I wanted to prioritise reliability and I saw ECC as a key part of this. The second reason was availability. AM4 is a very mature platform with an abundance of hardware, making it a great way to get ECC memory at a reasonable price point.</p>
+<h3 id="case---jonsbo-n2">Case - Jonsbo N2<a hidden class="anchor" aria-hidden="true" href="#case---jonsbo-n2">#</a></h3>
+<p>The first objective of the server chassis was to be small, which this case manages excellently by being just 25cm in all directions. This case was also ideal for the hot-swap hard drive bays, keeping maintenance and expansion far easier than more closed-off cases. The final reason for this pick was purely aesthetics, this server will be fairly visible and I wanted to ensure that this server was never an eyesore, something which I believe this case manages excellently.</p>
+<h3 id="processor---amd-ryzen-7-pro-4750g">Processor - AMD Ryzen 7 Pro 4750G<a hidden class="anchor" aria-hidden="true" href="#processor---amd-ryzen-7-pro-4750g">#</a></h3>
+<p>The Ryzen 7 Pro 4750G in particular was selected as there was no plan to add a dedicated GPU to this build and so an APU was needed so I could interface with the server for initial setup/future administration. However, as only the “Pro” series of AM4 APUs support ECC my choices to satisfy both conditions were limited to this particular line. To narrow the search, I began looking at the Ryzen 7 line of CPUs to give the server plenty of cores for high performance across multiple virtual machines. The final roadblock was the “Pro” series of Ryzen APUs are typically OEM only, limiting my options to the APUs available on the second hand market. This finally led me to the 4750G as I was able to source it for a good price from Ebay.</p>
+<h3 id="cpu-cooler---amd-wraith-stealth">CPU Cooler - AMD Wraith Stealth<a hidden class="anchor" aria-hidden="true" href="#cpu-cooler---amd-wraith-stealth">#</a></h3>
+<p>This was a choice made out of convenience above anything else. As an OEM CPU there was no bundled CPU cooler and instead of sourcing an aftermarket cooler, I instead opted for the AMD Wraith Stealth as I just so happened to it in storage from when I built my Gaming PC. It meets the height limitations of the PC case, and has plenty of cooling capacity for my processor making it an acceptable choice. If I were to upgrade in the future I would look towards the Noctua NH-L12 Ghost S1 but for now that doesn&rsquo;t seem necessary.</p>
+<h3 id="motherboard---gigabyte-b550i-aorus-pro-ax">Motherboard - Gigabyte B550I AORUS PRO AX<a hidden class="anchor" aria-hidden="true" href="#motherboard---gigabyte-b550i-aorus-pro-ax">#</a></h3>
+<p>For the motherboard I was limited to motherboards from either ASRock or Gigabyte as they seem to be the only manufacturers that consistently supported ECC memory across their models. Continuing on from this, the Gigabyte B550I AORUS PRO AX was an appealing choice due to it having multiple M.2 slots to maximise expansion in such a small form factor, as well as its integrated 2.5 gigabit NIC which will bre greatly appreciated when it comes to large file transfers across the local network.</p>
+<h3 id="ram---micron-2x16gb-ddr4-3200-ecc-udimms">RAM - Micron 2x1​6GB DDR4-3​200 ECC UD​IMMs<a hidden class="anchor" aria-hidden="true" href="#ram---micron-2x16gb-ddr4-3200-ecc-udimms">#</a></h3>
+<p>While ECC was a clear requirement for this build, I also didn’t wish to sacrifice too much in terms of performance with how reliant Ryzen is on high speed memory, leading my search towards 3200MHZ RAM as this was the highest speed available for unregistered ECC UDIMMs. 32GB was selected as the overall capacity for this build for a balance between having plenty of RAM to work with, and cost effectiveness as unregistered ECC DIMMs can be quite pricey.</p>
+<h3 id="power-supply---asus-rog-loki-750-w-80-platinum">Power Supply - Asus ROG LOKI 750 W 80+ Platinum<a hidden class="anchor" aria-hidden="true" href="#power-supply---asus-rog-loki-750-w-80-platinum">#</a></h3>
+<p>A reliable power supply was priority as unexpected power outages come with not only service disruptions, but potential for more severe issues like data corruption, this was why I went with a power supply that is regarded as among best in class for the SFX formfactor. On top of that, the Platinum efficiency rating helps keep the server’s power draw and heat output as low as possible, which is a nice bonus for a system that’s running 24/7. Furthermore, this power supply features a zero-rpm mode when running at low power and with the low power required by this server, it is likely that the fan will never have to spin, improving acoustic performance.</p>
+<h3 id="boot-drive---crucial-mx500-500gb">Boot Drive - Crucial MX500 500GB<a hidden class="anchor" aria-hidden="true" href="#boot-drive---crucial-mx500-500gb">#</a></h3>
+<p>With both M.2 drives on the motherboard set to be occupied for other uses, I instead looked towards SATA SSDs for my boot drive at the expense of some speed, which wasn&rsquo;t particularly important regardless. With a DRAM cache and Crucials reputation, I was confident that this drive would be plenty fast and reliable for this use case.</p>
+<h3 id="hard-drives---3x-wd-red-plus-4tb">Hard Drives - 3x WD Red Plus 4TB:<a hidden class="anchor" aria-hidden="true" href="#hard-drives---3x-wd-red-plus-4tb">#</a></h3>
+<p>For my bulk storage I went with WD Red Plus drives as not only are they a reliable pick, they are also widely regarded as some of the quietest NAS focused hard drives, aligning them with the objective of keeping server noise minimal. Three 4TB drives were selected due to their excellent price to capacity and facilitating the use of the RAID Z1 configuration to keep one drive as parity. Furthermore, 8TBs of storage was more than plenty for my needs and using 3 out of 5 drive bays left me with room for expansion if I find it necessary in the future.</p>
+<h3 id="extras---silverstone-ecs07-m2-sata-expansion-card">Extras - Silverstone ECS07 M.2 SATA Expansion Card<a hidden class="anchor" aria-hidden="true" href="#extras---silverstone-ecs07-m2-sata-expansion-card">#</a></h3>
+<p>A major limitation of the Mini-ITX platform within AM4 is that the motherboards max out at 4 SATA ports. With up to 5 Hard Drives and an SSD to attach, I found myself 2 SATA ports short. To address this I purchased a SATA expansion card which sacrifices an M.2 slot for 5 extra SATA slots, making it perfect as an attachment point for all five hard drive bays, while the boot SSD can simply use a motherboard sata port.</p>
+<h3 id="extras---google-coral-m2-tpu">Extras - Google Coral M.2 TPU<a hidden class="anchor" aria-hidden="true" href="#extras---google-coral-m2-tpu">#</a></h3>
+<p>At some point during the lifespan of this server, I also want to open up the possibility to run an NVR for completely local AI processing of home security cameras. To do this in a resource efficient way I looked towards the Coral series of TPU which are well supported amongst open source NVR systems such as Frigate. While another solution would&rsquo;ve been a dedicated GPU, this seemed like a far less efficient option that went against this servers desire to keep power low.</p>
+<h3 id="extras---noctua-nf-a12x25-120mm-fan--noctua-na-fg1-12-sx2-fan-grills">Extras - Noctua NF-A12x25 120mm fan + Noctua NA-FG1-12 Sx2 Fan Grills<a hidden class="anchor" aria-hidden="true" href="#extras---noctua-nf-a12x25-120mm-fan--noctua-na-fg1-12-sx2-fan-grills">#</a></h3>
+<p>The 120x15mm fan and restrictive fan grill that come in with the Jonsbo N2 by default are known to be quite loud and would compromise the quiet operation of the system. To fix this, I replaced the Fan with the ever-popular Noctua NF-A12x25 attached to a Noctua fan grill that was far less restrictive than the one bundled with the case. Together I hoped this combination would help take me a step closer to my goal of silent operation while also improving the cooling performance of my hard drives.</p>
+<h3 id="operating-system---proxmox">Operating System - Proxmox<a hidden class="anchor" aria-hidden="true" href="#operating-system---proxmox">#</a></h3>
+<p>For the operating system, I looked towards hypervisor OSs that would allow me the flexibility to run a variety of virtual machines and containers depending on the requirements of the service I am hosting, forming the backbone of my self-hosted stack. For this purpose Proxmox seemed like the easy choice as an open-source linux based OS that makes virtualisation management extremely easy from a web interface, meaning that I almost never have to interact with the server directly. The lack of license fees was also a huge positive, as it keeps my homelab more affordable as apposed to other hypervisor OSs such as EXSi.</p>
+<h2 id="challenges">Challenges<a hidden class="anchor" aria-hidden="true" href="#challenges">#</a></h2>
+<h3 id="boot-drive-power">Boot Drive Power<a hidden class="anchor" aria-hidden="true" href="#boot-drive-power">#</a></h3>
+<p>One delay that this build suffered was an inability to power the boot SSD as the sata power cable bundled with the power supply features only right angled cables which are incompatible with this case as the SSD sits right against the top shell, instead requiring a straight sata power cable. Fixing this required the ordering of a 30cm sata power cable from CableMod that could directly replace the multi-riight angled power. Upon arrival this cable cleared up this issue.</p>
+<h3 id="sata-backplane-cables">SATA Backplane Cables<a hidden class="anchor" aria-hidden="true" href="#sata-backplane-cables">#</a></h3>
+<p>With the addition of a fan that was 10mm thicker than the one included, there was now very little space between the sata backplane and the fan grill. This required me to be very careful with my cable connector thickness as to not break the backplane through interference between cables and the fan. For this reason I ordered right angled sata cables as well as an adaptor that would allow me to power both molex connectors required by the backplane with a two right angled connectors. With this space saving, I was just about able to fit all of my cabling as well as the improved fan without requiring any modification to the case itself.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/posts/selfhosting/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Self-Hosting</span>
+  </a>
+  <a class="next" href="http://localhost:1313/posts/android-sports-app/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Android Sports App</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/">Adam Day</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
