@@ -6,7 +6,7 @@ theme: ["PaperMod"]
 params:
     homeInfoParams:
         Title: 'Welcome to my Portfolio'
-        Content: 'A dedicated and detail-oriented Computer Science graduate with a strong passion for technology, problem-solving, and continuous learning. Eager to transition academic knowledge into practical industry experience, tackling real-world challenges and collaborating with talented teams. Looking to build on an existing foundation of technical skills to deliver effective solutions, adapt quickly to new technologies, and make a meaningful contribution within a professional environment.'
+        Content: "I'm a Computer Science graduate, and this space is where I document the projects I’m working on or have worked on in the past. I share insight into the thought processes behind my decisions and the lessons I’ve learned along the way, creating a written record of my work and interests as I continue developing my skills and taking on new challenges."
     socialIcons:
         - name: github
           url: 'https://github.com/adamrd29?tab=repositories'
