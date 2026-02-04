@@ -1,6 +1,5 @@
 +++
 title = 'Servo-Controlled Web Camera'
-date = 2024-02-16T15:47:05+01:00
 draft = false
 +++
 ## Introduction

@@ -1,6 +1,5 @@
 +++
 title = 'Android Sports App'
-date = 2024-05-25T15:47:05+01:00
 draft = false
 +++
 ## Introduction

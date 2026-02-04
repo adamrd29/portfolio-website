@@ -1,6 +1,5 @@
 +++
 title = 'Home Server PC Build'
-date = 2025-05-08T15:47:05+01:00
 draft = false
 +++
 

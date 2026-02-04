@@ -1,6 +1,5 @@
 +++
 title = 'Self-Hosting'
-date = 2025-05-20T15:47:05+01:00
 draft = false
 +++
 ## NAS

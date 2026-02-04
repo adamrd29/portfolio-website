@@ -1,6 +1,5 @@
 +++
 title = 'AI Animal Classifier'
-date = 2024-04-26T00:00:05+01:00
 draft = false
 +++
 ## Abstract
